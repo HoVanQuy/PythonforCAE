@@ -18,13 +18,13 @@ import part
 
 #Define a sketch by using the ConstrainedSketch() method. This method in turn has Line() method
 overhoistSketch = overhoistModel.ConstrainedSketch(name='overhoist sketch 2D', sheetSize=10.0)
-overhoistSketch.line(point1=(0,0), point2=(1,0))
-overhoistSketch.line(point1=(1,0), point2=(2,0))
-overhoistSketch.line(point1=(0,0), point2=(0.5,0.866))
-overhoistSketch.line(point1=(0.5,0.866), point2=(1.5,0.866))
-overhoistSketch.line(point1=(1.5,0.866), point2=(2,0))
-overhoistSketch.line(point1=(0.5,0.866), point2=(1,0))
-overhoistSketch.line(point1=(1,0), point2=(1.5,0.866))
+overhoistSketch.Line(point1=(0,0), point2=(1,0))
+overhoistSketch.Line(point1=(1,0), point2=(2,0))
+overhoistSketch.Line(point1=(0,0), point2=(0.5,0.866))
+overhoistSketch.Line(point1=(0.5,0.866), point2=(1.5,0.866))
+overhoistSketch.Line(point1=(1.5,0.866), point2=(2,0))
+overhoistSketch.Line(point1=(0.5,0.866), point2=(1,0))
+overhoistSketch.Line(point1=(1,0), point2=(1.5,0.866))
 
 #Create Part unsing Part() method
 #TWO_D_PLANAR is SYMBOLIC CONSTANTS
