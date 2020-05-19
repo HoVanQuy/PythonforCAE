@@ -18,8 +18,8 @@ cantileverPart.BaseSolidExtrude(sketch=cantileverSketch, depth=200)
 
 import material
 cantileverMaterial = cantileverModel.Material(name='Steel')
-cantileverMaterial.Density(table=((7800, ), ))
-cantileverMaterial.Elastic(table=((200E9,0.29), ))
+cantileverMaterial.Density(table=((7.8E-9, ), ))
+cantileverMaterial.Elastic(table=((200E,0.29), ))
 
 import section
 #Create a solid section using HomogeneousSolidSection() method
