@@ -54,22 +54,42 @@ del conLugModel.historyOutputRequests['H-Output-1']
 #Identify the face by partitioning for load application
 #To partition part, we will create datum plane and then use PartitionCellByDatumPlane
 conLugPart.DatumPlaneByPrincipalPlane(principalPlane=XZPLANE, offset=0)
-#conLugPart.DatumPlaneByPrincipalPlane(principalPlane=YZPLANE, offset=0)
-conLug_interior_xcoord = -0.0625
-conLug_interior_ycoord = 0
-conLug_interior_zcoord = 0.01
+conLugPart.DatumPlaneByPrincipalPlane(principalPlane=YZPLANE, offset=0)
+conLugPart.DatumPlaneByPrincipalPlane(principalPlane=YZPLANE, offset=-0.025)
+
 conLugCells = conLugPart.cells
-allconLugCells = conLugCells.findAt((conLug_interior_xcoord, conLug_interior_ycoord, conLug_interior_zcoord),)
+
+allconLugCells = conLugCells.findAt((-0.0625,0,0.01),)
 conLugPart.PartitionCellByDatumPlane(datumPlane=conLugPart.datums[3], cells=allconLugCells)
 
-#Finding bottom curved surface so that it can be used for loading
-conLug_bottomcurve_surface_point = (0,-0.015,0.01)
-conLug_bottomcurve_surface = conLugInstance.faces.findAt((conLug_bottomcurve_surface_point,))
-conLugAssembly.Surface(side1Faces=conLug_bottomcurve_surface, name='Bottom Curved Surface')
-conLug_load_region = conLugAssembly.surfaces['Bottom Curved Surface']
+allconLugCells = conLugCells.findAt((-0.0625,0.02,0.01),)
+conLugPart.PartitionCellByDatumPlane(datumPlane=conLugPart.datums[4], cells=allconLugCells)
 
+allconLugCells = conLugCells.findAt((-0.0625,-0.02,0.01),)
+conLugPart.PartitionCellByDatumPlane(datumPlane=conLugPart.datums[4], cells=allconLugCells)
+
+allconLugCells = conLugCells.findAt((-0.0625,0.02,0.01),)
+conLugPart.PartitionCellByDatumPlane(datumPlane=conLugPart.datums[5], cells=allconLugCells)
+
+allconLugCells = conLugCells.findAt((-0.0625,-0.02,0.01),)
+conLugPart.PartitionCellByDatumPlane(datumPlane=conLugPart.datums[5], cells=allconLugCells)
+
+
+#Finding bottom curved surface so that it can be used for loading
+#Now we have already partitioned part along YZ plane, wehave to find 2 face to apply load
+#Face 1
+conLug_bottomcurve_surface_point1 = (0.015/sqrt(2),-0.015/sqrt(2),0.01)
+conLug_bottomcurve_surface1 = conLugInstance.faces.findAt((conLug_bottomcurve_surface_point1,))
+conLugAssembly.Surface(side1Faces=conLug_bottomcurve_surface1, name='Bottom Curved Surface 1')
+conLug_load_region1 = conLugAssembly.surfaces['Bottom Curved Surface 1']
+#Face 2
+conLug_bottomcurve_surface_point2 = (-0.015/sqrt(2),-0.015/sqrt(2),0.01)
+conLug_bottomcurve_surface2 = conLugInstance.faces.findAt((conLug_bottomcurve_surface_point2,))
+conLugAssembly.Surface(side1Faces=conLug_bottomcurve_surface2, name='Bottom Curved Surface 2')
+conLug_load_region2 = conLugAssembly.surfaces['Bottom Curved Surface 2']
 #Apply the pressure loads
-conLugModel.Pressure(name='Load-1', createStepName='Apply Load', region=conLug_load_region, distributionType=UNIFORM, magnitude=5E7, amplitude=UNSET)
+conLugModel.Pressure(name='Load-1', createStepName='Apply Load', region=conLug_load_region1, distributionType=UNIFORM, magnitude=2.5E7, amplitude=UNSET)
+conLugModel.Pressure(name='Load-2', createStepName='Apply Load', region=conLug_load_region2, distributionType=UNIFORM, magnitude=2.5E7, amplitude=UNSET)
 
 #Identify faces and apply boundary conditions
 #Now we have already partitioned part along XZ plane, we have to identify 2 faces that represent the fixed end and fix them
@@ -100,7 +120,7 @@ import mesh
 element_type_for_mesh = mesh.ElemType(elemCode=C3D20R, elemLibrary=STANDARD, kinematicSplit=AVERAGE_STRAIN, secondOrderAccuracy=OFF, hourglassControl=DEFAULT, distortionControl=DEFAULT)
 conLugMeshRegion = (allconLugCells,)
 conLugPart.setElementType(regions=conLugMeshRegion, elemTypes=(element_type_for_mesh,))
-conLugPart.seedPart(size=0.005, deviationFactor=0.1)
+conLugPart.seedPart(size=0.0025, deviationFactor=0.1)
 conLugPart.generateMesh()
 
 import job
@@ -116,4 +136,4 @@ connecting_lug_viewport = session.Viewport(name='Connecting Lug Results Viewport
 connecting_lug_Odb_Path = 'ConnectingLugJob.odb'
 odb_object_1 = session.openOdb(name=connecting_lug_Odb_Path)
 connecting_lug_viewport.setValues(displayedObject=odb_object_1)
-connecting_lug_viewport.odbDisplay.display.setValues(plotState=(DEFORMED,))
+connecting_lug_viewport.odbDisplay.display.setValues(plotState=(CONTOURS_ON_DEF,))

@@ -19,7 +19,7 @@ cantileverPart.BaseSolidExtrude(sketch=cantileverSketch, depth=200)
 import material
 cantileverMaterial = cantileverModel.Material(name='Steel')
 cantileverMaterial.Density(table=((7.8E-9, ), ))
-cantileverMaterial.Elastic(table=((200E,0.29), ))
+cantileverMaterial.Elastic(table=((200E3,0.29), ))
 
 import section
 #Create a solid section using HomogeneousSolidSection() method
@@ -98,4 +98,4 @@ cantilever_viewport = session.Viewport(name='Cantilever Beam Results viewport')
 cantilever_odb_path = 'CantileverJob.odb'
 cantilever_odb_object = session.openOdb(name=cantilever_odb_path)
 cantilever_viewport.setValues(displayedObject=cantilever_odb_object)
-cantilever_viewport.odbDisplay.display.setValues(plotState=(DEFORMED,))
+cantilever_viewport.odbDisplay.display.setValues(plotState=(UNDEFORMED,CONTOURS_ON_DEF,))
