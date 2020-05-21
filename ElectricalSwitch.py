@@ -84,6 +84,7 @@ switchModel.ContactProperty('Interaction Property')
 switchModel.interactionProperties['Interaction Property'].TangentialBehavior(formulation=FRICTIONLESS)
 switchModel.interactionProperties['Interaction Property'].NormalBehavior(pressureOverclosure=HARD, allowSeparation=ON, contactStiffness=DEFAULT, contactStiffnessScaleFactor=1, clearanceAtZeroContactPressure=0, stiffnessBehavior=LINEAR, constraintEnforcementMethod=PENALTY)
 #Define master and slave surfaces
+#side...faces() to create direction of surfaces  
 master_surface_point = (5,0,1)
 master_surface = swithInstance.faces.findAt((master_surface_point,))
 master_surface_region = switchAssembly.Surface(side2Faces=master_surface, name='Master Surface')
